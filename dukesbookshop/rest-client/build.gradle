@@ -1,0 +1,80 @@
+
+apply plugin: 'war'
+
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+   mavenLocal()
+    maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url "http://repository.primefaces.org" }
+	 jcenter()
+  }
+  dependencies {
+    classpath "com.bmuschko:gradle-cargo-plugin:2.2.3"
+  }
+}
+
+description = 'rest-client'
+dependencies {
+    compile group: 'javax', name: 'javaee-api', version:'7.0'
+    compile group: 'javax', name: 'javaee-web-api', version:'7.0'
+    compile group: 'org.primefaces', name: 'primefaces', version:'6.0'
+    compile group: 'org.primefaces.themes', name: 'all-themes', version:'1.0.10'
+    testCompile group: 'org.jboss.arquillian.container', name: 'arquillian-glassfish-remote-3.1', version:'1.0.0.CR4'
+}
+
+
+apply plugin: "com.bmuschko.cargo"
+apply plugin: 'maven-publish'
+
+dependencies {
+    compile group: 'javax', name: 'javaee-api', version:'7.0'
+	def cargoVersion = '1.4.15'
+    compile "org.codehaus.cargo:cargo-daemon-client:$cargoVersion"
+	}
+	
+	
+	
+	cargo{
+	
+	cargoRunLocal.dependsOn assemble
+	containerId='glassfish4x'
+	
+	
+	
+		
+	deployable{
+	context='/rest-client'	
+	}
+	
+	local{
+	
+	installer{
+	installUrl='http://download.java.net/glassfish/4.1/release/glassfish-4.1.zip'
+	downloadDir = file("D:/ProgramFiles/servers/Appservers")
+	extractDir=file("D:/ProgramFiles/servers/Appservers")
+	}
+	
+	homeDir = file('D:/ProgramFiles/servers/Appservers/glassfish-4.1')
+	
+	containerProperties {
+	 
+	property 'cargo.servlet.port', 8080
+	property 'cargo.glassfish.admin.port', 4881
+	property 'cargo.glassfish.jms.port', 7681
+	property 'cargo.glassfish.domain.jmxPort', 8681
+	property 'cargo.glassfish.http.ssl.port', 8180
+	property 'cargo.glassfish.orb.ssl.port', 3881
+	property 'cargo.glassfish.orb.mutualauth.port', 3981
+	property 'cargo.glassfish.osgi.shell.telnet.port', 6681
+	property 'cargo.glassfish.orb.listener.port', 3781
+	
+	}
+	
+	
+	}
+	
+	
+	}

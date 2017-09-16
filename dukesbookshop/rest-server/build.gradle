@@ -1,0 +1,65 @@
+
+apply plugin: 'war'
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+	 jcenter()
+  }
+  dependencies {
+    classpath "com.bmuschko:gradle-cargo-plugin:2.2.3"
+  }
+}
+
+apply plugin: "com.bmuschko.cargo"
+apply plugin: 'maven-publish'
+
+description = 'rest-server'
+
+dependencies {
+    compile group: 'javax', name: 'javaee-api', version:'7.0'
+	def cargoVersion = '1.4.15'
+    compile "org.codehaus.cargo:cargo-daemon-client:$cargoVersion"
+	}
+	
+	
+	
+	cargo{
+	
+	cargoRunLocal.dependsOn assemble
+	containerId='glassfish4x'
+		
+	deployable{
+	context='/rest-server'
+	}
+	
+	local{
+	
+	homeDir = file('D:/ProgramFiles/servers/Appservers/glassfish-4.1')
+
+	installer{
+	installUrl='http://download.java.net/glassfish/4.1/release/glassfish-4.1.zip'
+	downloadDir = file("D:/ProgramFiles/servers/Appservers")
+	extractDir=file("D:/ProgramFiles/servers/Appservers")
+	}
+	containerProperties {
+	 
+	property 'cargo.servlet.port', 8081
+	property 'cargo.glassfish.admin.port', 4882
+	property 'cargo.glassfish.jms.port', 7682
+	property 'cargo.glassfish.domain.jmxPort', 8682
+	property 'cargo.glassfish.http.ssl.port', 8182
+	property 'cargo.glassfish.orb.ssl.port', 3882
+	property 'cargo.glassfish.orb.mutualauth.port', 3982
+	property 'cargo.glassfish.osgi.shell.telnet.port', 6682
+	property 'cargo.glassfish.orb.listener.port', 3782
+	
+	}
+
+	
+	}
+	
+	
+	}
+

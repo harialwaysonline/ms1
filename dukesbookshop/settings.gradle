@@ -1,0 +1,6 @@
+rootProject.name = 'dukesbookshop'
+include ':rest-server'
+include ':rest-client'
+
+project(':rest-server').projectDir = "$rootDir/rest-server" as File
+project(':rest-client').projectDir = "$rootDir/rest-client" as File
